@@ -499,7 +499,6 @@ void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
 
         if (step_counter >= step_target)
         {
-        	DebugPrint("TIM");
             HAL_TIM_PWM_Stop_IT(&htim5, TIM_CHANNEL_4);
             is_moving = 0;
         }

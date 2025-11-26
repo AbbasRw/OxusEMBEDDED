@@ -1,0 +1,56 @@
+
+# STM32CubeIDE / STM32CubeMX
+
+.settings/
+.launches/
+.metadata/
+*.launch
+*.scvd
+*.svd
+
+# Build output
+Debug/
+Release/
+build/
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.o
+*.d
+*.su
+*.dep
+*.axf
+
+# Compiler / toolchain intermediate
+*.log
+*.srec
+*.list
+*.tmp
+*.bak
+*.swo
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDE-specific
+.vscode/
+.idea/
+*.code-workspace
+
+# Python / SCons / others (optional if used)
+__pycache__/
+*.pyc
+
+# Others (optional)
+*.old
+*.orig
+*~
+/BioXY/Drivers
+/BioXY/Middlewares
+/.metadata
+/.metadata
+.metadata/.plugins/org.eclipse.cdt.core/BioXY_CM4.language.settings.xml
+.metadata/.plugins/org.eclipse.cdt.core/BioXY_CM7.language.settings.xml

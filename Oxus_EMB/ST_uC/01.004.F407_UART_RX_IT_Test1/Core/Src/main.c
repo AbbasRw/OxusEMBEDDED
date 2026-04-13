@@ -52,7 +52,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart4;
 
 /* USER CODE BEGIN PV */
 // Simple variables
@@ -81,13 +81,13 @@ void DebugPrint(const char *format, ...)
     vsnprintf(uartBuffer, sizeof(uartBuffer), format, args);
     va_end(args);
 
-    HAL_UART_Transmit(&huart2, (uint8_t*)uartBuffer, strlen(uartBuffer), HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart4, (uint8_t*)uartBuffer, strlen(uartBuffer), HAL_MAX_DELAY);
 }
 
 void simple_uart_init(void)
 {
     // Start UART reception interrupt
-    if (HAL_UART_Receive_IT(&huart2, &rx_data, 1) != HAL_OK) {
+    if (HAL_UART_Receive_IT(&huart4, &rx_data, 1) != HAL_OK) {
     	DebugPrint("ERROR: Could not start UART RX interrupt!\r\n");
     } else {
     	DebugPrint("UART RX interrupt started successfully!\r\n");
@@ -255,15 +255,15 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 1 */
 
   /* USER CODE END USART2_Init 1 */
-  huart2.Instance = USART2;
-  huart2.Init.BaudRate = 2000000;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
-  huart2.Init.StopBits = UART_STOPBITS_1;
-  huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart2) != HAL_OK)
+  huart4.Instance = USART2;
+  huart4.Init.BaudRate = 2000000;
+  huart4.Init.WordLength = UART_WORDLENGTH_8B;
+  huart4.Init.StopBits = UART_STOPBITS_1;
+  huart4.Init.Parity = UART_PARITY_NONE;
+  huart4.Init.Mode = UART_MODE_TX_RX;
+  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart4) != HAL_OK)
   {
     Error_Handler();
   }
@@ -300,7 +300,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	if (huart->Instance == USART2)
 	    {
 	        // Restart UART reception for next byte
-	        if (HAL_UART_Receive_IT(&huart2, &rx_data, 1) != HAL_OK) {
+	        if (HAL_UART_Receive_IT(&huart4, &rx_data, 1) != HAL_OK) {
 	            DebugPrint("UART IT restart failed\r\n");
 	        }
 

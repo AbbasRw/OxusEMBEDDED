@@ -353,69 +353,129 @@ Event_t parse_char(uint8_t c)
 }
 
 
+//void check_dma_data(void)
+//{
+//    static uint16_t old_pos = 0;
+//    static uint32_t total_pos = 0;
+//
+//    uint16_t pos = sizeof(dma_rx_buffer) - __HAL_DMA_GET_COUNTER(&hdma_usart3_rx);
+//
+//    if (pos == old_pos)
+//        return;
+//
+//    /* ---------- No wrap ---------- */
+//    if (pos > old_pos)
+//    {
+//        for (uint16_t i = old_pos; i < pos; i++)
+//        {
+//            uint8_t c = dma_rx_buffer[i];
+//            Event_t evt = parse_char(c);
+//
+////            DebugPrint("[%lu] RX: 0x%02X '%c'\r\n",
+////                       total_pos++, c, c);
+//
+//            if (evt != EVT_NONE)
+//            {
+//                DebugPrint("EVENT detected: '%c'\r\n\r\n", c);
+//                HSM_Dispatch(evt);
+//            }
+//        }
+//    }
+//    /* ---------- Wrap ---------- */
+//    else
+//    {
+//        for (uint16_t i = old_pos; i < sizeof(dma_rx_buffer); i++)
+//        {
+//            uint8_t c = dma_rx_buffer[i];
+//            Event_t evt = parse_char(c);
+//
+////            DebugPrint("[%lu] RX: 0x%02X '%c'\r\n",
+////                       total_pos++, c, c);
+//
+//            if (evt != EVT_NONE)
+//            {
+//                DebugPrint("EVENT detected: '%c'\r\n\r\n", c);
+//                HSM_Dispatch(evt);
+//            }
+//        }
+//
+//        for (uint16_t i = 0; i < pos; i++)
+//        {
+//            uint8_t c = dma_rx_buffer[i];
+//            Event_t evt = parse_char(c);
+//
+////            DebugPrint("[%lu] RX: 0x%02X '%c'\r\n",
+////                       total_pos++, c, c);
+//
+//            if (evt != EVT_NONE)
+//            {
+//                DebugPrint("EVENT detected: '%c'\r\n\r\n", c);
+//                HSM_Dispatch(evt);
+//            }
+//        }
+//    }
+//
+//    old_pos = pos;
+//}
+
+
+static void handle_command(const char *cmd)
+{
+    if (strcmp(cmd, "inject start") == 0)
+    {
+        DebugPrint("CMD OK: Injection started\r\n");
+        // 👉 Call your function here
+        // inject_start();
+    }
+    else if (strcmp(cmd, "inject stop") == 0)
+    {
+        DebugPrint("CMD OK: Injection stopped\r\n");
+        // inject_stop();
+    }
+    else
+    {
+        DebugPrint("Unknown command: %s\r\n", cmd);
+    }
+}
+
+
+
 void check_dma_data(void)
 {
     static uint16_t old_pos = 0;
-    static uint32_t total_pos = 0;
+    uint16_t pos =
+        sizeof(dma_rx_buffer) - __HAL_DMA_GET_COUNTER(&hdma_usart3_rx);
 
-    uint16_t pos = sizeof(dma_rx_buffer) - __HAL_DMA_GET_COUNTER(&hdma_usart3_rx);
+    static char cmd_buf[64];
+    static uint8_t cmd_len = 0;
 
     if (pos == old_pos)
         return;
 
-    /* ---------- No wrap ---------- */
-    if (pos > old_pos)
+    while (old_pos != pos)
     {
-        for (uint16_t i = old_pos; i < pos; i++)
+        char c = dma_rx_buffer[old_pos++];
+        if (old_pos >= sizeof(dma_rx_buffer))
+            old_pos = 0;
+
+        // Line termination
+        if (c == '\r' || c == '\n')
         {
-            uint8_t c = dma_rx_buffer[i];
-            Event_t evt = parse_char(c);
-
-//            DebugPrint("[%lu] RX: 0x%02X '%c'\r\n",
-//                       total_pos++, c, c);
-
-            if (evt != EVT_NONE)
+            if (cmd_len > 0)
             {
-                DebugPrint("EVENT detected: '%c'\r\n\r\n", c);
-                HSM_Dispatch(evt);
+                cmd_buf[cmd_len] = '\0';
+                handle_command(cmd_buf);
+                cmd_len = 0;
+            }
+        }
+        else
+        {
+            if (cmd_len < sizeof(cmd_buf) - 1)
+            {
+                cmd_buf[cmd_len++] = c;
             }
         }
     }
-    /* ---------- Wrap ---------- */
-    else
-    {
-        for (uint16_t i = old_pos; i < sizeof(dma_rx_buffer); i++)
-        {
-            uint8_t c = dma_rx_buffer[i];
-            Event_t evt = parse_char(c);
-
-//            DebugPrint("[%lu] RX: 0x%02X '%c'\r\n",
-//                       total_pos++, c, c);
-
-            if (evt != EVT_NONE)
-            {
-                DebugPrint("EVENT detected: '%c'\r\n\r\n", c);
-                HSM_Dispatch(evt);
-            }
-        }
-
-        for (uint16_t i = 0; i < pos; i++)
-        {
-            uint8_t c = dma_rx_buffer[i];
-            Event_t evt = parse_char(c);
-
-//            DebugPrint("[%lu] RX: 0x%02X '%c'\r\n",
-//                       total_pos++, c, c);
-
-            if (evt != EVT_NONE)
-            {
-                DebugPrint("EVENT detected: '%c'\r\n\r\n", c);
-                HSM_Dispatch(evt);
-            }
-        }
-    }
-
-    old_pos = pos;
 }
 
 

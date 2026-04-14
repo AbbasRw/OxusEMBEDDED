@@ -1,56 +1,69 @@
+########################################
+# 🧠 Embedded Systems - General Template
+########################################
 
-# STM32CubeIDE / STM32CubeMX
-
-.settings/
-.launches/
-.metadata/
-*.launch
-*.scvd
-*.svd
-
-# Build output
+########## 🔧 Build Outputs ##########
+build/
+Build/
 Debug/
 Release/
-build/
+out/
+
 *.elf
-*.bin
+*.axf
 *.hex
+*.bin
 *.map
 *.lst
 *.o
 *.d
 *.su
 *.dep
-*.axf
-
-# Compiler / toolchain intermediate
-*.log
 *.srec
-*.list
+
+########## ⚙️ Toolchain / Compiler ##########
+*.log
 *.tmp
 *.bak
+*.list
 *.swo
 
-# OS-specific
+########## 🧩 STM32CubeIDE / Eclipse ##########
+.settings/
+.metadata/
+.metadata/*
+!.metadata/.gitignore
+
+*.launch
+.launches/
+
+########## 🧠 VS Code / IDE ##########
+.vscode/
+*.code-workspace
+
+########## 🧠 JetBrains ##########
+.idea/
+
+########## 🖥️ OS Files ##########
 .DS_Store
 Thumbs.db
 
-# IDE-specific
-.vscode/
-.idea/
-*.code-workspace
-
-# Python / SCons / others (optional if used)
+########## 🐍 Python (optional tools/scripts) ##########
 __pycache__/
 *.pyc
 
-# Others (optional)
+########## 🧾 Backup / Temp ##########
 *.old
 *.orig
 *~
-/BioXY/Drivers
-/BioXY/Middlewares
-/.metadata
-/.metadata
-.metadata/.plugins/org.eclipse.cdt.core/BioXY_CM4.language.settings.xml
-.metadata/.plugins/org.eclipse.cdt.core/BioXY_CM7.language.settings.xml
+
+########################################
+# ⚠️ IMPORTANT: KEEP SOURCE FILES
+########################################
+# DO NOT ignore:
+# - Core/
+# - Drivers/
+# - Middlewares/
+# - FreeRTOS/
+# - Application code
+########################################
